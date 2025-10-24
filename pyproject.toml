@@ -1,0 +1,10 @@
+[project]
+name = "saponoso"
+version = "0.1.0"
+description = "SAP on Orchestrated SOAP Operations - A Python library to interact with SAP web services using SOAP."
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "httpx>=0.28.1",
+    "lxml>=6.0.2",
+]
