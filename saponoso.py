@@ -28,7 +28,7 @@ class Saponoso:
     }
 
     def __init__(self, **kwargs):
-        endpoint = Saponoso.endpoints.get(kwargs.get("endpoint", "qas"))
+        endpoint = Saponoso.endpoints.get(kwargs.get("endpoint", "qas"), kwargs.get("endpoint"))
         username = kwargs.get("username") or os.environ.get("SAP_USERNAME")
         password = kwargs.get("password") or os.environ.get("SAP_PASSWORD")
         if not endpoint:
@@ -146,6 +146,11 @@ class Saponoso:
             if len(var_elem) and all(etree.QName(child).localname == "item" for child in var_elem.iterchildren()):
                 table = []
                 for item in var_elem.iterchildren():
+                    if item.text:
+                        # Simple list of scalars
+                        table.append(self._decode_payload(item.text.strip()))
+                        continue
+                    # Complex row with multiple columns
                     row = {}
                     for col in item.iterchildren():
                         col_key = etree.QName(col).localname
